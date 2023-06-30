@@ -19,8 +19,7 @@ public class Item {
     Boolean hasAddons;
     int categoryId;
 
-    public Item(int categoryId, int id, String title, String description, Date createDate, Date endDate, Boolean isFinished, Boolean notify, Boolean hasAddons) {
-        this.id = id;
+    public Item(int categoryId, String title, String description, Date createDate, Date endDate, Boolean isFinished, Boolean notify, Boolean hasAddons) {
         this.title = title;
         this.description = description;
         this.createDate = createDate;
@@ -29,6 +28,13 @@ public class Item {
         this.notify = notify;
         this.categoryId = categoryId;
         this.hasAddons = hasAddons;
+    }
+
+    public Item(String title, String description, Date endDate){
+        this.title = title;
+        this.description = description;
+        this.endDate = endDate;
+        this.hasAddons=false;
     }
 
     public Boolean getHasAddons() {

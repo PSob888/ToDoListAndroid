@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +17,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +39,7 @@ public class ListFragment extends Fragment {
     private String mParam2;
 
     Spinner dropdown;
+    RecyclerView recyclerView;
 
     public ListFragment() {
         // Required empty public constructor
@@ -78,6 +85,18 @@ public class ListFragment extends Fragment {
 
         dropdown = view.findViewById(R.id.spinner2);
         initspinnerfooter();
+
+        //Dodac pobieranie itemow z bazy tutaj
+        List<Item> items = new ArrayList<Item>();
+        items.add(new Item("Test1", "Testowy opis 12345", new Date()));
+        items.add(new Item("Test2", "Testowy opis bardzo bardzo bardzo bardzo bardzo bardzo bardzo bardzo bardzo bardzo dlugi", new Date()));
+        items.add(new Item("Test3", "Testowy opis 1337", new Date()));
+
+        recyclerView = view.findViewById(R.id.recyclerViewList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setAdapter(new MyAdapter(view.getContext(), items));
+
+
     }
 
     private void initspinnerfooter() {
