@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class AddNewActivity extends AppCompatActivity {
 
     Spinner spinner;
@@ -47,6 +50,30 @@ public class AddNewActivity extends AppCompatActivity {
 
     public void onClickSave(View v){
         //Dodac tutaj logike zapisu do bazy
+
+        String title = textTitle.getText().toString();
+        String description = textDescription.getText().toString();
+        String category = spinner.getSelectedItem().toString();
+        Date createDate = new Date();
+        Boolean isFinished = boxStatus.isChecked();
+        Boolean notify = boxNotify.isChecked();
+        //dopisac ataczmenty
+        Boolean hasAddons = false;
+
+        int hour = timePicker.getHour();
+        int minute = timePicker.getMinute();
+
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year = datePicker.getYear();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, hour, minute, 0);
+
+        Date endDate = calendar.getTime();
+
+        Item item = new Item(category, title, description, createDate, endDate, isFinished, notify, hasAddons);
+
 
 
         Intent myIntent = new Intent(this, MainActivity.class);
