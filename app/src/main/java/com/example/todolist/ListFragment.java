@@ -1,5 +1,6 @@
 package com.example.todolist;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -17,6 +18,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +43,7 @@ public class ListFragment extends Fragment {
 
     Spinner dropdown;
     RecyclerView recyclerView;
+    FloatingActionButton floatingActionButton;
 
     public ListFragment() {
         // Required empty public constructor
@@ -95,6 +99,18 @@ public class ListFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(new MyAdapter(view.getContext(), items));
+
+        floatingActionButton = view.findViewById(R.id.floatingButtonList);
+        floatingActionButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                Intent myIntent = new Intent(mainActivity, AddNewActivity.class);
+                mainActivity.startActivity(myIntent);
+            }
+        });
 
 
     }

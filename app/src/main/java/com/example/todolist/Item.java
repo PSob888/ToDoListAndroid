@@ -17,16 +17,16 @@ public class Item {
     Boolean isFinished;
     Boolean notify;
     Boolean hasAddons;
-    int categoryId;
+    String category;
 
-    public Item(int categoryId, String title, String description, Date createDate, Date endDate, Boolean isFinished, Boolean notify, Boolean hasAddons) {
+    public Item(String category, String title, String description, Date createDate, Date endDate, Boolean isFinished, Boolean notify, Boolean hasAddons) {
         this.title = title;
         this.description = description;
         this.createDate = createDate;
         this.endDate = endDate;
         this.isFinished = isFinished;
         this.notify = notify;
-        this.categoryId = categoryId;
+        this.category = category;
         this.hasAddons = hasAddons;
     }
 
@@ -101,11 +101,11 @@ public class Item {
         this.notify = notify;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryId(String category) {
+        this.category = category;
     }
 }
