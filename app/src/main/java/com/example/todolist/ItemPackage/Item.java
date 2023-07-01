@@ -1,9 +1,11 @@
-package com.example.todolist;
+package com.example.todolist.ItemPackage;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
+
+import com.example.todolist.DateConverter;
 
 import java.util.Date;
 import java.util.List;

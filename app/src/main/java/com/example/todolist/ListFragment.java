@@ -20,6 +20,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.todolist.ItemPackage.Item;
+import com.example.todolist.ItemPackage.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
