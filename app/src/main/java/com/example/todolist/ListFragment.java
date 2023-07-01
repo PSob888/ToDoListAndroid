@@ -90,6 +90,16 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initAll(view);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        initAll(this.getView());
+    }
+
+    private void initAll(@NonNull View view) {
         MainActivity mainActivity = (MainActivity) getActivity();
 
         dropdown = view.findViewById(R.id.spinner2);
@@ -125,8 +135,6 @@ public class ListFragment extends Fragment {
                 mainActivity.startActivity(myIntent);
             }
         });
-
-
     }
 
     private void initspinnerfooter() {
