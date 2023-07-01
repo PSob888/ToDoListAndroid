@@ -111,13 +111,13 @@ public class CategoriesFragment extends Fragment {
         });
         //recyclerView.setAdapter(new MyAdapter(view.getContext(), items));
 
-        floatingActionButton = view.findViewById(R.id.floatingButtonList);
+        floatingActionButton = view.findViewById(R.id.floatingActionButtonCategories);
         floatingActionButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent myIntent = new Intent(mainActivity, AddNewActivity.class);
+                Intent myIntent = new Intent(mainActivity, AddCategoryActivity.class);
                 mainActivity.startActivity(myIntent);
             }
         });
