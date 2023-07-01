@@ -33,6 +33,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         holder.title.setText(itemList.get(position).getTitle());
         holder.description.setText(itemList.get(position).getDescription());
         holder.date.setText(itemList.get(position).getEndDate().toString());
+        holder.category.setText(itemList.get(position).getCategory());
         if(itemList.get(position).getHasAddons()){
             holder.imageView.setVisibility(View.VISIBLE);
         }
