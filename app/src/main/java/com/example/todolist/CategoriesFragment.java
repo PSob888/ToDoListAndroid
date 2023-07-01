@@ -1,12 +1,27 @@
 package com.example.todolist;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.todolist.CategoryPackage.Category;
+import com.example.todolist.CategoryPackage.CategoryViewModel;
+import com.example.todolist.ItemPackage.Item;
+import com.example.todolist.ItemPackage.ItemViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +38,11 @@ public class CategoriesFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    RecyclerView recyclerView;
+    FloatingActionButton floatingActionButton;
+
+    private CategoryViewModel categoryViewModel;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -60,5 +80,46 @@ public class CategoriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_categories, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initAll(view);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        initAll(this.getView());
+    }
+
+    private void initAll(@NonNull View view) {
+        MainActivity mainActivity = (MainActivity) getActivity();
+
+        categoryViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(mainActivity.getApplication()).create(CategoryViewModel.class);
+
+        recyclerView = view.findViewById(R.id.recyclerViewCategories);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        categoryViewModel.getAllStudentsFromVm().observe(mainActivity, students ->
+        {
+            if (students != null && !students.isEmpty()) {
+                MyAdapter2 adapter = new MyAdapter2(view.getContext(), (ArrayList<Category>) students);
+                recyclerView.setAdapter(adapter);
+            }
+        });
+        //recyclerView.setAdapter(new MyAdapter(view.getContext(), items));
+
+        floatingActionButton = view.findViewById(R.id.floatingButtonList);
+        floatingActionButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent myIntent = new Intent(mainActivity, AddNewActivity.class);
+                mainActivity.startActivity(myIntent);
+            }
+        });
     }
 }
