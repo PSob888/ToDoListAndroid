@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,6 +45,7 @@ public class ListFragment extends Fragment {
     Spinner dropdown;
     RecyclerView recyclerView;
     FloatingActionButton floatingActionButton;
+    private ItemViewModel itemViewModel;
 
     public ListFragment() {
         // Required empty public constructor
@@ -86,6 +88,7 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        MainActivity mainActivity = (MainActivity) getActivity();
 
         dropdown = view.findViewById(R.id.spinner2);
         initspinnerfooter();
@@ -96,9 +99,19 @@ public class ListFragment extends Fragment {
         items.add(new Item("Test2", "Testowy opis bardzo bardzo bardzo bardzo bardzo bardzo bardzo bardzo bardzo bardzo dlugi", new Date()));
         items.add(new Item("Test3", "Testowy opis 1337", new Date()));
 
+        itemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(mainActivity.getApplication()).create(ItemViewModel.class);
+
         recyclerView = view.findViewById(R.id.recyclerViewList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerView.setAdapter(new MyAdapter(view.getContext(), items));
+
+        itemViewModel.getAllStudentsFromVm().observe(mainActivity, students ->
+        {
+            if (students != null && !students.isEmpty()) {
+                MyAdapter adapter = new MyAdapter(view.getContext(), (ArrayList<Item>) students);
+                recyclerView.setAdapter(adapter);
+            }
+        });
+        //recyclerView.setAdapter(new MyAdapter(view.getContext(), items));
 
         floatingActionButton = view.findViewById(R.id.floatingButtonList);
         floatingActionButton.setOnClickListener(new View.OnClickListener()
@@ -106,7 +119,6 @@ public class ListFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                MainActivity mainActivity = (MainActivity) getActivity();
                 Intent myIntent = new Intent(mainActivity, AddNewActivity.class);
                 mainActivity.startActivity(myIntent);
             }

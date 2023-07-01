@@ -1,12 +1,15 @@
 package com.example.todolist;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity(tableName = "item_table")
+@TypeConverters(DateConverter.class)
 public class Item {
     @PrimaryKey(autoGenerate = true)
     int id;
@@ -30,6 +33,7 @@ public class Item {
         this.hasAddons = hasAddons;
     }
 
+    @Ignore
     public Item(String title, String description, Date endDate){
         this.title = title;
         this.description = description;

@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -53,7 +54,8 @@ public class AddNewActivity extends AppCompatActivity {
 
         String title = textTitle.getText().toString();
         String description = textDescription.getText().toString();
-        String category = spinner.getSelectedItem().toString();
+        //String category = spinner.getSelectedItem().toString();
+        String category = "Other";
         Date createDate = new Date();
         Boolean isFinished = boxStatus.isChecked();
         Boolean notify = boxNotify.isChecked();
@@ -74,7 +76,9 @@ public class AddNewActivity extends AppCompatActivity {
 
         Item item = new Item(category, title, description, createDate, endDate, isFinished, notify, hasAddons);
 
+        ItemViewModel itemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ItemViewModel.class);
 
+        itemViewModel.insertStudent(item);
 
         Intent myIntent = new Intent(this, MainActivity.class);
         this.startActivity(myIntent);
