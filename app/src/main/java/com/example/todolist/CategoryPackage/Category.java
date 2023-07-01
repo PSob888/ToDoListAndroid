@@ -1,4 +1,4 @@
-package com.example.todolist;
+package com.example.todolist.CategoryPackage;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -9,7 +9,7 @@ public class Category {
     int id;
     String name;
 
-    public Category(int id, String name) {
+    public Category(String name) {
         this.name = name;
     }
 
