@@ -99,6 +99,7 @@ public class AddNewActivity extends AppCompatActivity {
 
     private void initspinnerfooter() {
         List<String> items = new ArrayList<>();
+        items.add("Other");
 
         categoryViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(CategoryViewModel.class);
 
@@ -110,7 +111,6 @@ public class AddNewActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
         spinner.setAdapter(adapter);
