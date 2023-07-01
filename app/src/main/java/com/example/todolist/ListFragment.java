@@ -138,10 +138,6 @@ public class ListFragment extends Fragment {
     }
 
     private void initspinnerfooter() {
-//        String[] items = new String[]{
-//                "all"
-//        };
-
         List<String> items = new ArrayList<>();
         items.add("all");
 
