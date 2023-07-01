@@ -20,6 +20,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.todolist.CategoryPackage.Category;
+import com.example.todolist.CategoryPackage.CategoryViewModel;
 import com.example.todolist.ItemPackage.Item;
 import com.example.todolist.ItemPackage.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -48,6 +50,7 @@ public class ListFragment extends Fragment {
     RecyclerView recyclerView;
     FloatingActionButton floatingActionButton;
     private ItemViewModel itemViewModel;
+    private CategoryViewModel categoryViewModel;
 
     public ListFragment() {
         // Required empty public constructor
@@ -107,9 +110,6 @@ public class ListFragment extends Fragment {
 
         //Dodac pobieranie itemow z bazy tutaj
         List<Item> items = new ArrayList<Item>();
-        items.add(new Item("Test1", "Testowy opis 12345", new Date()));
-        items.add(new Item("Test2", "Testowy opis bardzo bardzo bardzo bardzo bardzo bardzo bardzo bardzo bardzo bardzo dlugi", new Date()));
-        items.add(new Item("Test3", "Testowy opis 1337", new Date()));
 
         itemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(mainActivity.getApplication()).create(ItemViewModel.class);
 
@@ -138,9 +138,25 @@ public class ListFragment extends Fragment {
     }
 
     private void initspinnerfooter() {
-        String[] items = new String[]{
-                "tutaj", "beda", "kategorie", "kiedys",
-        };
+//        String[] items = new String[]{
+//                "all"
+//        };
+
+        List<String> items = new ArrayList<>();
+        items.add("all");
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+        categoryViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(mainActivity.getApplication()).create(CategoryViewModel.class);
+
+        categoryViewModel.getAllStudentsFromVm().observe(mainActivity, students ->
+        {
+            if (students != null && !students.isEmpty()) {
+                for(int i=0;i<students.size();i++){
+                    items.add(students.get(i).getName());
+                }
+            }
+        });
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, items);
         dropdown.setAdapter(adapter);
