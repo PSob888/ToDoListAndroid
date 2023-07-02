@@ -25,6 +25,7 @@ import com.example.todolist.CategoryPackage.CategoryViewModel;
 import com.example.todolist.ItemPackage.Item;
 import com.example.todolist.ItemPackage.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -121,6 +122,23 @@ public class ListFragment extends Fragment {
             if (students != null && !students.isEmpty()) {
                 MyAdapter adapter = new MyAdapter(view.getContext(), (ArrayList<Item>) students);
                 recyclerView.setAdapter(adapter);
+                recyclerView.addOnItemTouchListener(
+                        new RecyclerItemClickListener(view.getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override public void onItemClick(View view, int position) {
+                                Intent intent = new Intent(view.getContext(), EditItemActivity.class);
+                                Gson gson = new Gson();
+                                String json = gson.toJson(students.get(position));
+                                Bundle b = new Bundle();
+                                b.putString("cat", json); //Your id
+                                intent.putExtras(b); //Put your id to your next Intent
+                                startActivity(intent);
+                            }
+
+                            @Override public void onLongItemClick(View view, int position) {
+                                // do whatever
+                            }
+                        })
+                );
             }
         });
         //recyclerView.setAdapter(new MyAdapter(view.getContext(), items));
