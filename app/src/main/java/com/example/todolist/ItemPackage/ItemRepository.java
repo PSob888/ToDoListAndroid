@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 public class ItemRepository {
     ItemDatabase itemDatabase;
@@ -18,7 +19,7 @@ public class ItemRepository {
     }
 
     public void insertItem(Item Item) {
-        ItemDatabase.databaseWriteExecutor.execute(() -> ItemDao.insert(Item));
+        ItemDatabase.databaseWriteExecutor.submit(() -> ItemDao.insert(Item));
     }
 
     public LiveData<List<Item>> getAllItems() {

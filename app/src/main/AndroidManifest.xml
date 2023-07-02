@@ -13,9 +13,13 @@
         android:theme="@style/Theme.ToDoList"
         tools:targetApi="31">
         <activity
+            android:name=".EditItemActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
             android:name=".EditCategoryActivity"
             android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar"/>
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".AddCategoryActivity"
             android:exported="false"

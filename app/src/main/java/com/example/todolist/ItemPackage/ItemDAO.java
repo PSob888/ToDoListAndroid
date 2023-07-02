@@ -21,5 +21,7 @@ public interface ItemDAO {
     @Query("SELECT * from item_table ORDER By endDate Asc")
     LiveData<List<Item>> getItems();
 
+    @Query("SELECT * FROM item_table")
+    List<Item> getAll();
 
 }
