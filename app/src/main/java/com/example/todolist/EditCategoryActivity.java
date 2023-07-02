@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.todolist.CategoryPackage.Category;
 import com.example.todolist.CategoryPackage.CategoryViewModel;
@@ -44,13 +45,36 @@ public class EditCategoryActivity extends AppCompatActivity {
     public void onClickSave(View v){
         //Dodac tutaj logike zapisu do bazy
 
+        if(category.getName().equals("Other")){
+            Toast.makeText(this , "You cant change category Other", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         String name = editText.getText().toString();
 
         CategoryViewModel itemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(CategoryViewModel.class);
 
-        Category item = new Category(name);
+        category.setName(name);
 
-        itemViewModel.insertStudent(item);
+        //itemViewModel.insertStudent(item);
+        itemViewModel.updateCategory(category);
+
+        Intent myIntent = new Intent(this, MainActivity.class);
+        this.startActivity(myIntent);
+    }
+
+    public void onClickDelete(View v){
+        //Dodac tutaj logike zapisu do bazy
+
+        if(category.getName().equals("Other")){
+            Toast.makeText(this , "You cant change category Other", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        CategoryViewModel itemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(CategoryViewModel.class);
+
+        //itemViewModel.insertStudent(item);
+        itemViewModel.deleteCategory(category);
 
         Intent myIntent = new Intent(this, MainActivity.class);
         this.startActivity(myIntent);

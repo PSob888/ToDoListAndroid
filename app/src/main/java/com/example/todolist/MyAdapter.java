@@ -40,6 +40,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         else{
             holder.imageView.setVisibility(View.INVISIBLE);
         }
+        if(itemList.get(position).getFinished()){
+            holder.isFinished.setText("Finished YES");
+        }
+        else{
+            holder.isFinished.setText("Finished NO");
+        }
     }
 
     @Override

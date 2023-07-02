@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AddCategoryActivity">
+    tools:context=".EditCategoryActivity">
 
     <TextView
         android:id="@+id/textView9"
@@ -47,6 +47,7 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="onClickDelete"
         android:text="@string/Delete" />
 
 

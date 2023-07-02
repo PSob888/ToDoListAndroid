@@ -2,6 +2,7 @@ package com.example.todolist.CategoryPackage;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -16,6 +17,9 @@ public interface CategoryDAO {
 
     @Update
     void update(Category category);
+
+    @Delete
+    void delete(Category category);
 
     @Query("SELECT * from category_table ORDER By id Asc")
     LiveData<List<Category>> getStudent();

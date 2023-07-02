@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.todolist.CategoryPackage.Category;
 import com.example.todolist.CategoryPackage.CategoryViewModel;
@@ -37,6 +38,13 @@ public class AddCategoryActivity extends AppCompatActivity {
         //Dodac tutaj logike zapisu do bazy
 
         String name = textTitle.getText().toString();
+
+
+        //Dopisac checker czy juz takie jest
+        if(name.equals("Other")){
+            Toast.makeText(this , "You make category Other", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         CategoryViewModel itemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(CategoryViewModel.class);
 

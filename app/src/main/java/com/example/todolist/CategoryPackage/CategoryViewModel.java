@@ -24,4 +24,12 @@ public class CategoryViewModel extends AndroidViewModel {
     public void insertStudent(Category category) {
         categoryRepository.insertCategory(category);
     }
+
+    public void updateCategory(Category category){
+        categoryRepository.updateCategory(category);
+    }
+
+    public void deleteCategory(Category category){
+        categoryRepository.deleteCategory(category);
+    }
 }
