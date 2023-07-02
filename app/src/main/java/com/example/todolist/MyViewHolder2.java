@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MyViewHolder2 extends RecyclerView.ViewHolder {
 
     TextView name;
+    Button button;
 
     public MyViewHolder2(@NonNull View itemView) {
         super(itemView);

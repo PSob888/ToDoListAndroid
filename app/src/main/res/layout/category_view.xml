@@ -7,21 +7,13 @@
     android:layout_margin="10dp"
     android:background="@color/grey">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textCategoryName"
         android:layout_width="match_parent"
-        android:layout_height="30dp">
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:text="TextView" />
 
-
-        <TextView
-            android:id="@+id/textCategoryName"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:text="TextView" />
-
-
-    </LinearLayout>
 
 </LinearLayout>

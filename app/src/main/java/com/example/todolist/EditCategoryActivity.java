@@ -31,8 +31,8 @@ public class EditCategoryActivity extends AppCompatActivity {
             //category = b.getInt("key");
         }
 
-
-        editText.findViewById(R.id.editTextCategoryEdit);
+        editText = findViewById(R.id.editTextCategoryEdit);
+        editText.setText(category.getName());
     }
 
     public void onClickCancel(View v){

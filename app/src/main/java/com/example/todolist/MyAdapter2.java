@@ -1,6 +1,8 @@
 package com.example.todolist;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todolist.CategoryPackage.Category;
 import com.example.todolist.ItemPackage.Item;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -37,5 +40,9 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyViewHolder2> {
     @Override
     public int getItemCount() {
         return itemList.size();
+    }
+
+    public void onButtonClick(){
+
     }
 }
