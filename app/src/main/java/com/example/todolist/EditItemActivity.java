@@ -98,9 +98,6 @@ public class EditItemActivity extends AppCompatActivity {
     public void onClickSave(View v){
         //Dodac tutaj logike zapisu do bazy
 
-        ItemViewModel itemViewModel2 = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ItemViewModel.class);
-        itemViewModel2.getAllStudentsFromVm().observe(this, students ->
-        {
             ItemViewModel itemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ItemViewModel.class);
 
 
@@ -139,15 +136,10 @@ public class EditItemActivity extends AppCompatActivity {
 
             Intent myIntent = new Intent(this, MainActivity.class);
             this.startActivity(myIntent);
-        });
-
 
     }
 
     public void onClickDelete(View v){
-        //sprawdzanie czy jakis item nie ma kategorii
-        ItemViewModel itemViewModel2 = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ItemViewModel.class);
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do you want to remove this category?");

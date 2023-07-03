@@ -52,6 +52,8 @@ public class ListFragment extends Fragment {
     FloatingActionButton floatingActionButton;
     private ItemViewModel itemViewModel;
     private CategoryViewModel categoryViewModel;
+    String searchCat;
+    boolean hideFinished;
 
     public ListFragment() {
         // Required empty public constructor
@@ -94,12 +96,14 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        searchCat = "all";
         initAll(view);
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        searchCat = "all";
         initAll(this.getView());
     }
 
@@ -120,7 +124,19 @@ public class ListFragment extends Fragment {
         itemViewModel.getAllStudentsFromVm().observe(mainActivity, students ->
         {
             if (students != null && !students.isEmpty()) {
-                MyAdapter adapter = new MyAdapter(view.getContext(), (ArrayList<Item>) students);
+                List<Item> itemki = new ArrayList<>();
+                if(!searchCat.equals("all")){
+                    for(Item item : students){
+                        if(item.getCategory().equals(searchCat)){
+                            itemki.add(item);
+                        }
+                    }
+                }
+                else{
+                    itemki = students;
+                }
+
+                MyAdapter adapter = new MyAdapter(view.getContext(), (ArrayList<Item>) itemki);
                 recyclerView.setAdapter(adapter);
                 recyclerView.addOnItemTouchListener(
                         new RecyclerItemClickListener(view.getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
@@ -141,7 +157,6 @@ public class ListFragment extends Fragment {
                 );
             }
         });
-        //recyclerView.setAdapter(new MyAdapter(view.getContext(), items));
 
         floatingActionButton = view.findViewById(R.id.floatingButtonList);
         floatingActionButton.setOnClickListener(new View.OnClickListener()
@@ -176,8 +191,62 @@ public class ListFragment extends Fragment {
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("item", (String) parent.getItemAtPosition(position));
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+                searchCat = dropdown.getSelectedItem().toString();
+                if(searchCat.equals("all")){
+                    itemViewModel.getAllStudentsFromVm().observe(mainActivity, students ->
+                    {
+                        if (students != null && !students.isEmpty()) {
+
+                            MyAdapter adapter = new MyAdapter(view.getContext(), (ArrayList<Item>) students);
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.addOnItemTouchListener(
+                                    new RecyclerItemClickListener(view.getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                                        @Override public void onItemClick(View view, int position) {
+                                            Intent intent = new Intent(view.getContext(), EditItemActivity.class);
+                                            Gson gson = new Gson();
+                                            String json = gson.toJson(students.get(position));
+                                            Bundle b = new Bundle();
+                                            b.putString("cat", json); //Your id
+                                            intent.putExtras(b); //Put your id to your next Intent
+                                            startActivity(intent);
+                                        }
+
+                                        @Override public void onLongItemClick(View view, int position) {
+                                            // do whatever
+                                        }
+                                    })
+                            );
+                        }
+                    });
+                }
+                else{
+                    itemViewModel.getAllItemsByCat(searchCat).observe(mainActivity, students ->
+                    {
+                        if (students != null && !students.isEmpty()) {
+
+                            MyAdapter adapter = new MyAdapter(view.getContext(), (ArrayList<Item>) students);
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.addOnItemTouchListener(
+                                    new RecyclerItemClickListener(view.getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                                        @Override public void onItemClick(View view, int position) {
+                                            Intent intent = new Intent(view.getContext(), EditItemActivity.class);
+                                            Gson gson = new Gson();
+                                            String json = gson.toJson(students.get(position));
+                                            Bundle b = new Bundle();
+                                            b.putString("cat", json); //Your id
+                                            intent.putExtras(b); //Put your id to your next Intent
+                                            startActivity(intent);
+                                        }
+
+                                        @Override public void onLongItemClick(View view, int position) {
+                                            // do whatever
+                                        }
+                                    })
+                            );
+                        }
+                    });
+                }
             }
 
             @Override

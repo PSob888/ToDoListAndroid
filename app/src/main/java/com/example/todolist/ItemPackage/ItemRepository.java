@@ -31,6 +31,12 @@ public class ItemRepository {
     }
 
     public LiveData<List<Item>> getAllItems() {
+        listItems = ItemDao.getItems();
+        return listItems;
+    }
+
+    public LiveData<List<Item>> getAllItemsByCat(String cat) {
+        listItems = ItemDao.getItemsCatSearch(cat);
         return listItems;
     }
 }

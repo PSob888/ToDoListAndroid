@@ -10,7 +10,7 @@ import java.util.List;
 public class ItemViewModel extends AndroidViewModel {
 
     private ItemRepository itemRepository;
-    private final LiveData<List<Item>> listLiveData;
+    private LiveData<List<Item>> listLiveData;
 
     public ItemViewModel(Application application) {
         super(application);
@@ -27,6 +27,12 @@ public class ItemViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Item>> getAllStudentsFromVm() {
+        listLiveData = itemRepository.getAllItems();
+        return listLiveData;
+    }
+
+    public LiveData<List<Item>> getAllItemsByCat(String string) {
+        listLiveData = itemRepository.getAllItemsByCat(string);
         return listLiveData;
     }
 
