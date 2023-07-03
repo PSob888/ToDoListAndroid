@@ -1,11 +1,21 @@
 package com.example.todolist;
 
+import static android.content.Context.ALARM_SERVICE;
+import static android.content.Context.NOTIFICATION_SERVICE;
+
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -101,6 +111,7 @@ public class ListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         searchCat = "all";
         initAll(view);
+        //notificationCreater();
     }
 
     @Override
@@ -108,6 +119,7 @@ public class ListFragment extends Fragment {
         super.onResume();
         searchCat = "all";
         initAll(this.getView());
+        //notificationCreater();
     }
 
     private void initAll(@NonNull View view) {
@@ -185,6 +197,37 @@ public class ListFragment extends Fragment {
                 // TODO Auto-generated method stub
             }
         });
+    }
+
+    public void notificationCreater(){
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "ToDoChannel";
+            String description = "Channel for todo reminders";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("todolist", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = mainActivity.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        Intent intent = new Intent(mainActivity, ReminderBroadcast.class);
+        PendingIntent pendingIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getBroadcast(mainActivity, 0, intent, PendingIntent.FLAG_MUTABLE);
+        }
+        else
+        {
+            pendingIntent = PendingIntent.getBroadcast(mainActivity, 0, intent, 0);
+        }
+        AlarmManager alarmManager = (AlarmManager) mainActivity.getSystemService(ALARM_SERVICE);
+
+        long currentTime = System.currentTimeMillis();
+
+        long tenSecondsInMilis = 1000*10;
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime + tenSecondsInMilis, pendingIntent);
     }
 
     private void Searcher(View view, MainActivity mainActivity) {

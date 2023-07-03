@@ -3,8 +3,15 @@ package com.example.todolist;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -24,6 +31,35 @@ public class MainActivity extends AppCompatActivity {
         PageAdapter pageAdapter = new PageAdapter(this);
         viewPager.setAdapter(pageAdapter);
         getNewestSettings();
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "ToDoChannel";
+            String description = "Channel for todo reminders";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("todolist", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        Intent intent = new Intent(this, ReminderBroadcast.class);
+        PendingIntent pendingIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_MUTABLE);
+        }
+        else
+        {
+            pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        }
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        long currentTime = System.currentTimeMillis();
+
+        long tenSecondsInMilis = 1000*10;
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime + tenSecondsInMilis, pendingIntent);
+        Log.d("MyTag", "Reminder set");
     }
 
     public void getNewestSettings(){
