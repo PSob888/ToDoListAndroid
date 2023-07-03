@@ -1,5 +1,8 @@
 package com.example.todolist;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -15,6 +18,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +41,7 @@ public class SettingsFragment extends Fragment {
     private String mParam2;
 
     Spinner dropdown;
+    Settings settings;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -77,21 +86,67 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         dropdown = view.findViewById(R.id.spinner);
+        getNewestSettings();
         initspinnerfooter();
     }
 
+    public void getNewestSettings(){
+        MainActivity mainActivity = (MainActivity) getActivity() ;
+        SharedPreferences mPrefs = mainActivity.getPreferences(MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = mPrefs.getString("settings", "");
+        Settings settings1 = gson.fromJson(json, Settings.class);
+
+        if(settings1 != null){
+            settings = new Settings(settings1.getMinutes());
+        }
+        else{
+            settings = new Settings(1);
+        }
+    }
+
+    public void saveSettings(){
+        MainActivity mainActivity = (MainActivity) getActivity() ;
+        SharedPreferences mPrefs = mainActivity.getPreferences(MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = gson.toJson(settings, Settings.class);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putString("settings", json);
+        prefsEditor.commit();
+    }
+
     private void initspinnerfooter() {
-        String[] items = new String[]{
-                "1min", "5min", "10min", "30min",
-        };
+
+        List<String> items = new ArrayList<>();
+        items.add("1min");
+        items.add("5min");
+        items.add("10min");
+        items.add("30min");
+
+        String set = settings.getMinutes() + "min";
+        int index = items.indexOf(set);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, items);
         dropdown.setAdapter(adapter);
+        dropdown.setSelection(index);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("item", (String) parent.getItemAtPosition(position));
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+                String selected = dropdown.getSelectedItem().toString();
+                if(selected.equals("1min")){
+                    settings = new Settings(1);
+                }
+                if(selected.equals("5min")){
+                    settings = new Settings(5);
+                }
+                if(selected.equals("10min")){
+                    settings = new Settings(10);
+                }
+                if(selected.equals("30min")){
+                    settings = new Settings(30);
+                }
+                saveSettings();
             }
 
             @Override
