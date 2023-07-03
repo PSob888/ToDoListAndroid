@@ -2,6 +2,7 @@ package com.example.todolist.ItemPackage;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -17,6 +18,9 @@ public interface ItemDAO {
 
     @Update
     void update(Item item);
+
+    @Delete
+    void delete(Item item);
 
     @Query("SELECT * from item_table ORDER By endDate Asc")
     LiveData<List<Item>> getItems();

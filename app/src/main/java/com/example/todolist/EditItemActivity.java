@@ -3,6 +3,9 @@ package com.example.todolist;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,10 +19,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.todolist.CategoryPackage.Category;
 import com.example.todolist.CategoryPackage.CategoryViewModel;
 import com.example.todolist.ItemPackage.Item;
+import com.example.todolist.ItemPackage.ItemViewModel;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -83,6 +88,88 @@ public class EditItemActivity extends AppCompatActivity {
         boxStatus.setChecked(item.getFinished());
         boxNotify.setChecked(item.getNotify());
         initspinnerfooter();
+    }
+
+    public void onClickCancel(View v){
+        Intent myIntent = new Intent(this, MainActivity.class);
+        this.startActivity(myIntent);
+    }
+
+    public void onClickSave(View v){
+        //Dodac tutaj logike zapisu do bazy
+
+        ItemViewModel itemViewModel2 = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ItemViewModel.class);
+        itemViewModel2.getAllStudentsFromVm().observe(this, students ->
+        {
+            ItemViewModel itemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ItemViewModel.class);
+
+
+            String title = textTitle.getText().toString();
+            String description = textDescription.getText().toString();
+            String category = spinner.getSelectedItem().toString();
+            //String category = "Other";
+            Boolean isFinished = boxStatus.isChecked();
+            Boolean notify = boxNotify.isChecked();
+            //dopisac ataczmenty
+            Boolean hasAddons = false;
+
+            int hour = timePicker.getHour();
+            int minute = timePicker.getMinute();
+
+            int day = datePicker.getDayOfMonth();
+            int month = datePicker.getMonth();
+            int year = datePicker.getYear();
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, month, day, hour, minute, 0);
+
+            Date endDate = calendar.getTime();
+
+            item.setTitle(title);
+            item.setDescription(description);
+            item.setCategoryId(category);
+            item.setFinished(isFinished);
+            item.setNotify(notify);
+            item.setHasAddons(hasAddons);
+            item.setEndDate(endDate);
+
+
+            //itemViewModel.insertStudent(item);
+            itemViewModel.updateItem(item);
+
+            Intent myIntent = new Intent(this, MainActivity.class);
+            this.startActivity(myIntent);
+        });
+
+
+    }
+
+    public void onClickDelete(View v){
+        //sprawdzanie czy jakis item nie ma kategorii
+        ItemViewModel itemViewModel2 = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ItemViewModel.class);
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you want to remove this category?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ItemViewModel itemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ItemViewModel.class);
+
+                itemViewModel.deleteItem(item);
+
+                Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(myIntent);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     private void initspinnerfooter() {

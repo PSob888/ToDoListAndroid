@@ -18,6 +18,14 @@ public class ItemRepository {
         listItems = ItemDao.getItems();
     }
 
+    public void deleteItem(Item item){
+        ItemDatabase.databaseWriteExecutor.submit(() -> ItemDao.delete(item));
+    }
+
+    public void updateItem(Item item){
+        ItemDatabase.databaseWriteExecutor.submit(() -> ItemDao.update(item));
+    }
+
     public void insertItem(Item Item) {
         ItemDatabase.databaseWriteExecutor.submit(() -> ItemDao.insert(Item));
     }

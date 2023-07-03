@@ -18,6 +18,14 @@ public class ItemViewModel extends AndroidViewModel {
         listLiveData = itemRepository.getAllItems();
     }
 
+    public void deleteItem(Item item){
+        itemRepository.deleteItem(item);
+    }
+
+    public void updateItem(Item item){
+        itemRepository.updateItem(item);
+    }
+
     public LiveData<List<Item>> getAllStudentsFromVm() {
         return listLiveData;
     }

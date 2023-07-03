@@ -21,13 +21,6 @@
             android:layout_weight="3" />
 
         <ImageButton
-            android:id="@+id/ButtonSearch"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:src="?android:attr/actionModeWebSearchDrawable" />
-
-        <ImageButton
             android:id="@+id/ButtonHide"
             android:layout_width="0dp"
             android:layout_height="50dp"
