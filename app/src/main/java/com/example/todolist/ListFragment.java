@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -53,7 +55,8 @@ public class ListFragment extends Fragment {
     private ItemViewModel itemViewModel;
     private CategoryViewModel categoryViewModel;
     String searchCat;
-    boolean hideFinished;
+    boolean hideFinished = false;
+    ImageButton buttonHide;
 
     public ListFragment() {
         // Required empty public constructor
@@ -121,42 +124,7 @@ public class ListFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        itemViewModel.getAllStudentsFromVm().observe(mainActivity, students ->
-        {
-            if (students != null && !students.isEmpty()) {
-                List<Item> itemki = new ArrayList<>();
-                if(!searchCat.equals("all")){
-                    for(Item item : students){
-                        if(item.getCategory().equals(searchCat)){
-                            itemki.add(item);
-                        }
-                    }
-                }
-                else{
-                    itemki = students;
-                }
-
-                MyAdapter adapter = new MyAdapter(view.getContext(), (ArrayList<Item>) itemki);
-                recyclerView.setAdapter(adapter);
-                recyclerView.addOnItemTouchListener(
-                        new RecyclerItemClickListener(view.getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                            @Override public void onItemClick(View view, int position) {
-                                Intent intent = new Intent(view.getContext(), EditItemActivity.class);
-                                Gson gson = new Gson();
-                                String json = gson.toJson(students.get(position));
-                                Bundle b = new Bundle();
-                                b.putString("cat", json); //Your id
-                                intent.putExtras(b); //Put your id to your next Intent
-                                startActivity(intent);
-                            }
-
-                            @Override public void onLongItemClick(View view, int position) {
-                                // do whatever
-                            }
-                        })
-                );
-            }
-        });
+        Searcher(view, mainActivity);
 
         floatingActionButton = view.findViewById(R.id.floatingButtonList);
         floatingActionButton.setOnClickListener(new View.OnClickListener()
@@ -166,6 +134,22 @@ public class ListFragment extends Fragment {
             {
                 Intent myIntent = new Intent(mainActivity, AddNewActivity.class);
                 mainActivity.startActivity(myIntent);
+            }
+        });
+        buttonHide = view.findViewById(R.id.ButtonHide);
+        buttonHide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(hideFinished){
+                    hideFinished = false;
+                    buttonHide.setImageResource(R.drawable.baseline_access_time_filled_24);
+                    Searcher(view, mainActivity);
+                }
+                else{
+                    hideFinished = true;
+                    buttonHide.setImageResource(R.drawable.baseline_access_time_24);
+                    Searcher(view, mainActivity);
+                }
             }
         });
     }
@@ -193,60 +177,7 @@ public class ListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
                 searchCat = dropdown.getSelectedItem().toString();
-                if(searchCat.equals("all")){
-                    itemViewModel.getAllStudentsFromVm().observe(mainActivity, students ->
-                    {
-                        if (students != null && !students.isEmpty()) {
-
-                            MyAdapter adapter = new MyAdapter(view.getContext(), (ArrayList<Item>) students);
-                            recyclerView.setAdapter(adapter);
-                            recyclerView.addOnItemTouchListener(
-                                    new RecyclerItemClickListener(view.getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                                        @Override public void onItemClick(View view, int position) {
-                                            Intent intent = new Intent(view.getContext(), EditItemActivity.class);
-                                            Gson gson = new Gson();
-                                            String json = gson.toJson(students.get(position));
-                                            Bundle b = new Bundle();
-                                            b.putString("cat", json); //Your id
-                                            intent.putExtras(b); //Put your id to your next Intent
-                                            startActivity(intent);
-                                        }
-
-                                        @Override public void onLongItemClick(View view, int position) {
-                                            // do whatever
-                                        }
-                                    })
-                            );
-                        }
-                    });
-                }
-                else{
-                    itemViewModel.getAllItemsByCat(searchCat).observe(mainActivity, students ->
-                    {
-                        if (students != null && !students.isEmpty()) {
-
-                            MyAdapter adapter = new MyAdapter(view.getContext(), (ArrayList<Item>) students);
-                            recyclerView.setAdapter(adapter);
-                            recyclerView.addOnItemTouchListener(
-                                    new RecyclerItemClickListener(view.getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                                        @Override public void onItemClick(View view, int position) {
-                                            Intent intent = new Intent(view.getContext(), EditItemActivity.class);
-                                            Gson gson = new Gson();
-                                            String json = gson.toJson(students.get(position));
-                                            Bundle b = new Bundle();
-                                            b.putString("cat", json); //Your id
-                                            intent.putExtras(b); //Put your id to your next Intent
-                                            startActivity(intent);
-                                        }
-
-                                        @Override public void onLongItemClick(View view, int position) {
-                                            // do whatever
-                                        }
-                                    })
-                            );
-                        }
-                    });
-                }
+                Searcher(view, mainActivity);
             }
 
             @Override
@@ -254,5 +185,85 @@ public class ListFragment extends Fragment {
                 // TODO Auto-generated method stub
             }
         });
+    }
+
+    private void Searcher(View view, MainActivity mainActivity) {
+        if(searchCat.equals("all")){
+            itemViewModel.getAllStudentsFromVm().observe(mainActivity, students ->
+            {
+                if (students != null && !students.isEmpty()) {
+                    List<Item> itemki = new ArrayList<>();
+                    if(hideFinished){
+                        for(Item item : students){
+                            if(!item.getFinished()){
+                                itemki.add(item);
+                            }
+                        }
+                    }
+                    else{
+                        itemki = students;
+                    }
+
+                    MyAdapter adapter = new MyAdapter(view.getContext(), (ArrayList<Item>) itemki);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.addOnItemTouchListener(
+                            new RecyclerItemClickListener(view.getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                                @Override public void onItemClick(View view, int position) {
+                                    Intent intent = new Intent(view.getContext(), EditItemActivity.class);
+                                    Gson gson = new Gson();
+                                    String json = gson.toJson(students.get(position));
+                                    Bundle b = new Bundle();
+                                    b.putString("cat", json); //Your id
+                                    intent.putExtras(b); //Put your id to your next Intent
+                                    startActivity(intent);
+                                }
+
+                                @Override public void onLongItemClick(View view, int position) {
+                                    // do whatever
+                                }
+                            })
+                    );
+                }
+            });
+        }
+        else{
+            itemViewModel.getAllItemsByCat(searchCat).observe(mainActivity, students ->
+            {
+                if (students != null && !students.isEmpty()) {
+
+                    List<Item> itemki = new ArrayList<>();
+                    if(hideFinished){
+                        for(Item item : students){
+                            if(!item.getFinished()){
+                                itemki.add(item);
+                            }
+                        }
+                    }
+                    else{
+                        itemki = students;
+                    }
+
+                    MyAdapter adapter = new MyAdapter(view.getContext(), (ArrayList<Item>) itemki);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.addOnItemTouchListener(
+                            new RecyclerItemClickListener(view.getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                                @Override public void onItemClick(View view, int position) {
+                                    Intent intent = new Intent(view.getContext(), EditItemActivity.class);
+                                    Gson gson = new Gson();
+                                    String json = gson.toJson(students.get(position));
+                                    Bundle b = new Bundle();
+                                    b.putString("cat", json); //Your id
+                                    intent.putExtras(b); //Put your id to your next Intent
+                                    startActivity(intent);
+                                }
+
+                                @Override public void onLongItemClick(View view, int position) {
+                                    // do whatever
+                                }
+                            })
+                    );
+                }
+            });
+        }
     }
 }
