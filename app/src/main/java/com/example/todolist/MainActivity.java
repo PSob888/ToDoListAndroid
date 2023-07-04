@@ -77,8 +77,10 @@ public class MainActivity extends AppCompatActivity {
         //Cancel all previously made notifications
         for (IntentPlusId thing : allIntents) {
             //alarmManager.cancel(thing.getPendingIntent());
+            Log.d("MyTag", String.valueOf(thing.getId()));
             thing.getPendingIntent().cancel();
         }
+        allIntents = new ArrayList<IntentPlusId>();
 
         //Make new notifiactions
         getNewestSettings();
@@ -90,8 +92,10 @@ public class MainActivity extends AppCompatActivity {
                 for(Item item : students){
                     Date d = new Date();
                     long interval = 60L *1000L*settings.getMinutes();
-                    if(item.getNotify() && (item.getEndDate().getTime() > d.getTime()-interval) && (!item.getFinished())){
-                        itemki.add(item);
+                    if(item.getNotify() && (item.getEndDate().getTime()-interval > d.getTime())){
+                        if(!item.getFinished()){
+                            itemki.add(item);
+                        }
                     }
                 }
                 for(Item item : itemki){
@@ -112,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
                     long interval = 60L *1000L*settings.getMinutes();
 
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime + interval, pendingIntent);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, item.getEndDate().getTime() - interval - (1000*60), pendingIntent);
                     Log.d("MyTag", "Reminder set");
                     IntentPlusId i = new IntentPlusId(item.getId(), pendingIntent);
                     allIntents.add(i);
