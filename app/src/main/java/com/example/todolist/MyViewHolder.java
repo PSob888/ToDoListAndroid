@@ -15,6 +15,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     TextView date;
     TextView category;
     TextView isFinished;
+    TextView notification;
 
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -25,5 +26,6 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         date = itemView.findViewById(R.id.textDate);
         category = itemView.findViewById(R.id.textCategory);
         isFinished = itemView.findViewById(R.id.textisFinished);
+        notification = itemView.findViewById(R.id.textNotification);
     }
 }

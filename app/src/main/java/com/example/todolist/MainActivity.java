@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 for(Item item : students){
                     Date d = new Date();
                     long interval = 60L *1000L*settings.getMinutes();
-                    if(item.getNotify() && (item.getEndDate().getTime() > d.getTime()-interval)){
+                    if(item.getNotify() && (item.getEndDate().getTime() > d.getTime()-interval) && (!item.getFinished())){
                         itemki.add(item);
                     }
                 }

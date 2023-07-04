@@ -52,6 +52,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         else{
             holder.isFinished.setText("Finished NO");
         }
+        if(itemList.get(position).getNotify()){
+            holder.notification.setText("Notification YES");
+        }
+        else{
+            holder.notification.setText("Notification NO");
+        }
     }
 
     @Override
