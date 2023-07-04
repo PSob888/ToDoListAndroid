@@ -147,6 +147,8 @@ public class SettingsFragment extends Fragment {
                     settings = new Settings(30);
                 }
                 saveSettings();
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.ManageNotifications();
             }
 
             @Override
