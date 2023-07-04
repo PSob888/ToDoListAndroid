@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     Settings settings;
     AlarmManager alarmManager;
-    List<IntentPlusId> allIntents = new ArrayList<>();
+    List<PendingIntent> allIntents = new ArrayList<>();
     private ItemViewModel itemViewModel;
 
     @Override
@@ -42,17 +42,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         itemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(ItemViewModel.class);
-
-        //retrieve all prevoius notifications
-        SharedPreferences mPrefs = this.getPreferences(MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = mPrefs.getString("allintents", "");
-        if(!json.equals("")){
-            //allIntents = Arrays.asList(gson.fromJson(json, IntentPlusId[].class));
-            Type type = new TypeToken<List<IntentPlusId>>(){}.getType();
-            allIntents = new Gson().fromJson(json, type);
-        }
-        //allIntents = (ArrayList<IntentPlusId>) gson.fromJson(json, new TypeToken<ArrayList<IntentPlusId>>() {}.getType());
 
         viewPager = findViewById(R.id.viewpager);
         PageAdapter pageAdapter = new PageAdapter(this);
@@ -75,12 +64,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void ManageNotifications(){
         //Cancel all previously made notifications
-        for (IntentPlusId thing : allIntents) {
-            //alarmManager.cancel(thing.getPendingIntent());
-            Log.d("MyTag", String.valueOf(thing.getId()));
-            thing.getPendingIntent().cancel();
+        for (PendingIntent thing : allIntents) {
+            if(thing!=null) {
+                alarmManager.cancel(thing);
+            }
+            //thing.cancel();
         }
-        allIntents = new ArrayList<IntentPlusId>();
+        allIntents = new ArrayList<PendingIntent>();
 
         //Make new notifiactions
         getNewestSettings();
@@ -118,8 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
                     alarmManager.set(AlarmManager.RTC_WAKEUP, item.getEndDate().getTime() - interval - (1000*60), pendingIntent);
                     Log.d("MyTag", "Reminder set");
-                    IntentPlusId i = new IntentPlusId(item.getId(), pendingIntent);
-                    allIntents.add(i);
+                    allIntents.add(pendingIntent);
                 }
 
                 //save all intents to shared preferences
