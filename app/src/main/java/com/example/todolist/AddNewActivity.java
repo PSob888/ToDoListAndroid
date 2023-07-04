@@ -21,6 +21,7 @@ import android.widget.TimePicker;
 import com.example.todolist.CategoryPackage.CategoryViewModel;
 import com.example.todolist.ItemPackage.Item;
 import com.example.todolist.ItemPackage.ItemViewModel;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -94,6 +95,9 @@ public class AddNewActivity extends AppCompatActivity {
         itemViewModel.insertStudent(item);
 
         Intent myIntent = new Intent(this, MainActivity.class);
+        Bundle b = new Bundle();
+        b.putString("cat", "change"); //Your id
+        myIntent.putExtras(b);
         this.startActivity(myIntent);
     }
 

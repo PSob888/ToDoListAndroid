@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         itemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(ItemViewModel.class);
 
@@ -59,7 +60,16 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
 
-        ManageNotifications();
+        Bundle b = getIntent().getExtras();
+        String s= null; // or other values
+        if(b != null){
+            Gson gson = new Gson();
+            s = b.getString("cat");
+            if(s.equals("change"))
+                ManageNotifications();
+            //category = b.getInt("key");
+        }
+
     }
 
     public void ManageNotifications(){

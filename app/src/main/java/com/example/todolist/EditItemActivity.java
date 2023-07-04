@@ -135,6 +135,9 @@ public class EditItemActivity extends AppCompatActivity {
             itemViewModel.updateItem(item);
 
             Intent myIntent = new Intent(this, MainActivity.class);
+            Bundle b = new Bundle();
+            b.putString("cat", "change"); //Your id
+            myIntent.putExtras(b);
             this.startActivity(myIntent);
 
     }
@@ -151,6 +154,9 @@ public class EditItemActivity extends AppCompatActivity {
                 itemViewModel.deleteItem(item);
 
                 Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+                Bundle b = new Bundle();
+                b.putString("cat", "change"); //Your id
+                myIntent.putExtras(b);
                 startActivity(myIntent);
             }
         });
