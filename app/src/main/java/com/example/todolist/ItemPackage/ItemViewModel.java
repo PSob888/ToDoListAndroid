@@ -26,6 +26,10 @@ public class ItemViewModel extends AndroidViewModel {
         itemRepository.updateItem(item);
     }
 
+    public LiveData<Long> insertItem2(Item item) {
+        return itemRepository.insertItem2(item);
+    }
+
     public LiveData<List<Item>> getAllStudentsFromVm() {
         listLiveData = itemRepository.getAllItems();
         return listLiveData;
@@ -34,6 +38,10 @@ public class ItemViewModel extends AndroidViewModel {
     public LiveData<List<Item>> getAllItemsByCat(String string) {
         listLiveData = itemRepository.getAllItemsByCat(string);
         return listLiveData;
+    }
+
+    public LiveData<Item> getItemById(int itemId) {
+        return itemRepository.getItemById(itemId);
     }
 
     public void insertStudent(Item item) {

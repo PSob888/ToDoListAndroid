@@ -120,14 +120,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("MyTag", "Reminder set");
                     allIntents.add(pendingIntent);
                 }
-
-                //save all intents to shared preferences
-                SharedPreferences mPrefs = this.getPreferences(MODE_PRIVATE);
-                Gson gson = new Gson();
-                String json = gson.toJson(allIntents);
-                SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                prefsEditor.putString("allintents", json);
-                prefsEditor.commit();
             }
         });
     }

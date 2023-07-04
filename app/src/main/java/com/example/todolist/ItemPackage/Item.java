@@ -7,6 +7,7 @@ import androidx.room.TypeConverters;
 
 import com.example.todolist.DateConverter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class Item {
     Boolean notify;
     Boolean hasAddons;
     String category;
+    List<String> attachmentPaths = new ArrayList<>();
 
     public Item(String category, String title, String description, Date createDate, Date endDate, Boolean isFinished, Boolean notify, Boolean hasAddons) {
         this.title = title;
@@ -33,6 +35,18 @@ public class Item {
         this.notify = notify;
         this.category = category;
         this.hasAddons = hasAddons;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public List<String> getAttachmentPaths() {
+        return attachmentPaths;
+    }
+
+    public void setAttachmentPaths(List<String> attachmentPaths) {
+        this.attachmentPaths = attachmentPaths;
     }
 
     @Ignore

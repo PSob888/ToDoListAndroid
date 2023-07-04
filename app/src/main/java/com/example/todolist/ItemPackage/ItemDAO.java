@@ -16,6 +16,9 @@ public interface ItemDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Item item);
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long insert2(Item item);
+
     @Update
     void update(Item item);
 
@@ -30,5 +33,8 @@ public interface ItemDAO {
 
     @Query("SELECT * FROM item_table")
     List<Item> getAll();
+
+    @Query("SELECT * FROM item_table WHERE id = :itemId LIMIT 1")
+    LiveData<Item> getItemById(int itemId);
 
 }

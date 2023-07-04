@@ -111,7 +111,6 @@ public class ListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         searchCat = "all";
         initAll(view);
-        //notificationCreater();
     }
 
     @Override
@@ -119,7 +118,6 @@ public class ListFragment extends Fragment {
         super.onResume();
         searchCat = "all";
         initAll(this.getView());
-        //notificationCreater();
     }
 
     private void initAll(@NonNull View view) {
@@ -199,9 +197,6 @@ public class ListFragment extends Fragment {
         });
     }
 
-    public void notificationCreater(){
-
-    }
 
     private void Searcher(View view, MainActivity mainActivity) {
         if(searchCat.equals("all")){

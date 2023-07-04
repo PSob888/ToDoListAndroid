@@ -3,6 +3,7 @@ package com.example.todolist.ItemPackage;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 import java.util.concurrent.Future;
@@ -16,6 +17,15 @@ public class ItemRepository {
         itemDatabase = ItemDatabase.getDatabase(application);
         ItemDao = itemDatabase.itemDAO();
         listItems = ItemDao.getItems();
+    }
+
+    public LiveData<Long> insertItem2(Item item) {
+        MutableLiveData<Long> insertedItemId = new MutableLiveData<>();
+        ItemDatabase.databaseWriteExecutor.execute(() -> {
+            long taskId = ItemDao.insert2(item);
+            insertedItemId.postValue(taskId);
+        });
+        return insertedItemId;
     }
 
     public void deleteItem(Item item){
@@ -38,5 +48,9 @@ public class ItemRepository {
     public LiveData<List<Item>> getAllItemsByCat(String cat) {
         listItems = ItemDao.getItemsCatSearch(cat);
         return listItems;
+    }
+
+    public LiveData<Item> getItemById(int itemId) {
+        return ItemDao.getItemById(itemId);
     }
 }
