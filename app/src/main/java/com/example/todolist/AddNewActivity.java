@@ -2,8 +2,10 @@ package com.example.todolist;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -75,8 +78,8 @@ public class AddNewActivity extends AppCompatActivity {
         attachmentAdapter = new ArrayAdapter<>(this, R.layout.list_item_attachment, R.id.text1, attachmentPaths);
         listViewAttachments.setAdapter(attachmentAdapter);
 
-        buttonAddAttachment.setOnClickListener(view -> openFilePicker());
         initspinnerfooter();
+        buttonAddAttachment.setOnClickListener(view -> openFilePicker());
     }
 
 
@@ -127,15 +130,13 @@ public class AddNewActivity extends AppCompatActivity {
                 itemViewModel.getItemById(id).observe(this, insertedTask -> {
                     if (insertedTask != null) {
                         insertedTask.setAttachmentPaths(attachmentPaths);
+                        if(attachmentPaths.size()!=0)
+                            insertedTask.setHasAddons(true);
                         itemViewModel.updateItem(insertedTask);
 
-                    } else {
-                        Log.v("MyTag", "Error retrieving inserted task");
                     }
                 });
                 Toast.makeText(this, "Item saved", Toast.LENGTH_SHORT).show();
-            } else {
-                Log.v("MyTag", "Error");
             }
         });;
 
@@ -209,6 +210,30 @@ public class AddNewActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
+    private void openFile(String filePath) {
+        File file = new File(filePath);
+        Uri fileUri = FileProvider.getUriForFile(this, "com.example.todolist.fileprovider", file);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(fileUri, getMimeType(filePath));
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No app found to open this file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String getMimeType(String filePath) {
+        String extension = MimeTypeMap.getFileExtensionFromUrl(filePath);
+        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        if (mimeType == null) {
+            mimeType = "*/*";
+        }
+        return mimeType;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -219,13 +244,11 @@ public class AddNewActivity extends AppCompatActivity {
                 for (int i = 0; i < count; i++) {
                     Uri uri = data.getClipData().getItemAt(i).getUri();
                     selectedUris.add(uri);
-                    Log.v("MyTag", "uri=" + uri);
                     attachmentPaths.add(getFileName(uri));
                 }
             } else if (data.getData() != null) {
                 Uri uri = data.getData();
                 selectedUris.add(uri);
-                Log.v("MyTag", "uri=" + uri);
                 attachmentPaths.add(getFileName(uri));
             }
             attachmentAdapter.notifyDataSetChanged();

@@ -11,11 +11,17 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
+import com.example.todolist.CategoryPackage.Category;
+import com.example.todolist.CategoryPackage.CategoryViewModel;
 import com.example.todolist.ItemPackage.Item;
 import com.example.todolist.ItemPackage.ItemViewModel;
 import com.google.gson.Gson;
@@ -70,6 +76,15 @@ public class MainActivity extends AppCompatActivity {
             //category = b.getInt("key");
         }
 
+        CategoryViewModel categoryViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(CategoryViewModel.class);
+
+        categoryViewModel.getAllStudentsFromVm().observe(this, students ->
+        {
+            if (students.isEmpty()) {
+                Category item = new Category("Other");
+                categoryViewModel.insertStudent(item);
+            }
+        });
     }
 
     public void ManageNotifications(){

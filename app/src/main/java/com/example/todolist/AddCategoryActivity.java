@@ -42,7 +42,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
         //Dopisac checker czy juz takie jest
         if(name.equals("Other")){
-            Toast.makeText(this , "You make category Other", Toast.LENGTH_LONG).show();
+            Toast.makeText(this , "You can't make category Other", Toast.LENGTH_LONG).show();
             return;
         }
 
