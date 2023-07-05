@@ -27,7 +27,14 @@ public class ReminderBroadcast extends BroadcastReceiver {
             item = gson.fromJson(b, Item.class);
         }
 
-        Intent resultIntent = new Intent(context, MainActivity.class);
+        Intent resultIntent = new Intent(context, EditItemActivity.class);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(item);
+        Bundle d = new Bundle();
+        d.putString("cat", json); //Your id
+        resultIntent.putExtras(d); //Put your id to your next Intent
+
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent notifyPendingIntent = PendingIntent.getActivity(

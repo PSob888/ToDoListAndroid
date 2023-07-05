@@ -79,7 +79,7 @@ public class AddNewActivity extends AppCompatActivity {
         listViewAttachments.setAdapter(attachmentAdapter);
 
         initspinnerfooter();
-        buttonAddAttachment.setOnClickListener(view -> openFilePicker());
+        buttonAddAttachment.setOnClickListener(view -> openPicker());
     }
 
 
@@ -121,7 +121,7 @@ public class AddNewActivity extends AppCompatActivity {
             if (insertedItemId != null && insertedItemId > 0) {
                 attachmentPaths.clear();
                 for (Uri uri : selectedUris) {
-                    String attachmentPath = copyFileToFolder(uri, insertedItemId);
+                    String attachmentPath = copyFile(uri, insertedItemId);
                     attachmentPaths.add(attachmentPath);
                 }
 
@@ -178,7 +178,7 @@ public class AddNewActivity extends AppCompatActivity {
         });
     }
 
-    private String copyFileToFolder(Uri uri, long taskId) {
+    private String copyFile(Uri uri, long taskId) {
         String path = null;
         try {
             InputStream inputStream = getContentResolver().openInputStream(uri);
@@ -203,7 +203,7 @@ public class AddNewActivity extends AppCompatActivity {
         return path;
     }
 
-    private void openFilePicker() {
+    private void openPicker() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);

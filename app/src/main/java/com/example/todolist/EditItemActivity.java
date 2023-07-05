@@ -82,7 +82,8 @@ public class EditItemActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.list_view_attachments2);
         attachmentPaths.clear();
-        attachmentPaths = item.getAttachmentPaths();
+        if(item != null)
+            attachmentPaths = item.getAttachmentPaths();
 
         List<String> attachmentNames = new ArrayList<>();
         for (String attachmentPath : attachmentPaths) {
