@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
                     long interval = 60L *1000L*settings.getMinutes();
 
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, item.getEndDate().getTime() - interval - (1000*60), pendingIntent);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, item.getEndDate().getTime() - interval, pendingIntent);
                     allIntents.add(pendingIntent);
                 }
             }
